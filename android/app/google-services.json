@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1064362251257",
+    "project_id": "finalproject-4a4e4",
+    "storage_bucket": "finalproject-4a4e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064362251257:android:b5b5ed815597d3a6dde328",
+        "android_client_info": {
+          "package_name": "com.example.jittirat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNcq-OniVVWk2BSvzvE4gENGOoyvmBNlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

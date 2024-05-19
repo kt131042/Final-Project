@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAbydnQWGj6-3zcNSVfAeKAKln1qL9W3RY',
-    appId: '1:1064362251257:web:6460cb2a34c75c90dde328',
+    appId: '1:1064362251257:web:0a9375e0db33c0c3dde328',
     messagingSenderId: '1064362251257',
     projectId: 'finalproject-4a4e4',
     authDomain: 'finalproject-4a4e4.firebaseapp.com',
     storageBucket: 'finalproject-4a4e4.appspot.com',
-    measurementId: 'G-Z8HSS0X497',
+    measurementId: 'G-5P8J693GYS',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCNcq-OniVVWk2BSvzvE4gENGOoyvmBNlY',
-    appId: '1:1064362251257:android:f3ff41de6c4a3000dde328',
+    appId: '1:1064362251257:android:b5b5ed815597d3a6dde328',
     messagingSenderId: '1064362251257',
     projectId: 'finalproject-4a4e4',
     storageBucket: 'finalproject-4a4e4.appspot.com',
@@ -60,29 +60,30 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAuBPY0-P29nfRNdLZCiDbLAsDGc3wfn7w',
-    appId: '1:1064362251257:ios:18095f5b4ea21188dde328',
+    appId: '1:1064362251257:ios:08d594ddab0eabf9dde328',
     messagingSenderId: '1064362251257',
     projectId: 'finalproject-4a4e4',
     storageBucket: 'finalproject-4a4e4.appspot.com',
-    iosBundleId: 'com.example.jittiratProject',
+    iosBundleId: 'com.example.jittirat',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAuBPY0-P29nfRNdLZCiDbLAsDGc3wfn7w',
-    appId: '1:1064362251257:ios:18095f5b4ea21188dde328',
+    appId: '1:1064362251257:ios:08d594ddab0eabf9dde328',
     messagingSenderId: '1064362251257',
     projectId: 'finalproject-4a4e4',
     storageBucket: 'finalproject-4a4e4.appspot.com',
-    iosBundleId: 'com.example.jittiratProject',
+    iosBundleId: 'com.example.jittirat',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyAbydnQWGj6-3zcNSVfAeKAKln1qL9W3RY',
-    appId: '1:1064362251257:web:59824367978c6e34dde328',
+    appId: '1:1064362251257:web:aeb7f2ef35f3572fdde328',
     messagingSenderId: '1064362251257',
     projectId: 'finalproject-4a4e4',
     authDomain: 'finalproject-4a4e4.firebaseapp.com',
     storageBucket: 'finalproject-4a4e4.appspot.com',
-    measurementId: 'G-DJM5LQL9VL',
+    measurementId: 'G-H94CG9M8HL',
   );
+
 }
