@@ -10,6 +10,14 @@ class Calculator extends StatefulWidget {
 class _CalculatorState extends State<Calculator> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(title: const Text("คำนวณค่าเช่า")),
+      body: Column(
+        children: [
+          const Text("data"),
+          ElevatedButton(onPressed: () {}, child: const Text("บันทึก"))
+        ],
+      ),
+    );
   }
 }

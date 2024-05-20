@@ -13,7 +13,7 @@ class _RoomState extends State<Room> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Room test"),
+        title: const Text("Room"),
       ),
       body: Column(
         children: [
