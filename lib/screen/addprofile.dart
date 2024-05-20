@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jittirat/model/userform.dart';
 
 class AddProfile extends StatefulWidget {
   const AddProfile({super.key});
@@ -9,10 +9,32 @@ class AddProfile extends StatefulWidget {
 }
 
 class _AddProfileState extends State<AddProfile> {
-  final formkey = GlobalKey<FormState>();
-  CustumerProfile userProfile = CustumerProfile();
-  bool? tvisChecked = true;
-  bool? frezzeisChecked = true;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool tvisChecked = false;
+  bool fridgeChecked = false;
+  String _name = '';
+  String _room = '';
+  String _contact = '';
+  String _checkin = '';
+  String _tv = '';
+  String _fridge = '';
+
+  Future<void> addData() {
+    return firestore
+        .collection('user')
+        .add({
+          'name': _name,
+          'rooom': _room,
+          'contact': _contact,
+          'checkin': _checkin,
+          'tv': _tv,
+          'fridge': _fridge,
+        })
+        .then((value) => debugPrint("Data Added"))
+        .catchError((error) => debugPrint("Failed to add data: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,27 +44,68 @@ class _AddProfileState extends State<AddProfile> {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Form(
-            key: formkey,
+            key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("ชื่อ-สกุล"),
                   TextFormField(
-                    onSaved: (String? name) {
-                      userProfile.name = name!;
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกชื่อ';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _name = value!;
                     },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
                   const Text("เบอร์โทรติดต่อ"),
-                  TextFormField(),
+                  TextFormField(
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกเบอร์โทรศัพท์';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _contact = value!;
+                    },
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
-                  const Text("ห้อง"),
-                  TextFormField(),
+                  const Text("หมายเลขห้อง"),
+                  TextFormField(
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกหมายเลขห้อง';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _room = value!;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text("วันเข้าหอ"),
+                  TextFormField(
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกวันเข้าหอ';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _checkin = value!;
+                    },
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -58,7 +121,8 @@ class _AddProfileState extends State<AddProfile> {
                           value: tvisChecked,
                           onChanged: (bool? value) {
                             setState(() {
-                              tvisChecked = value;
+                              tvisChecked = value!;
+                              _tv = tvisChecked ? "ทีวี" : "";
                             });
                           }),
                       const SizedBox(
@@ -66,10 +130,11 @@ class _AddProfileState extends State<AddProfile> {
                       ),
                       const Text("ตู้เย็น"),
                       Checkbox(
-                          value: frezzeisChecked,
+                          value: fridgeChecked,
                           onChanged: (bool? value) {
                             setState(() {
-                              frezzeisChecked = value;
+                              fridgeChecked = value!;
+                              _fridge = fridgeChecked ? "ตู้เย็น" : "";
                             });
                           }),
                     ],
@@ -80,7 +145,13 @@ class _AddProfileState extends State<AddProfile> {
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {}, child: const Text("บันทึก"))),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              addData();
+                            }
+                          },
+                          child: const Text("บันทึก"))),
                 ],
               ),
             )),
