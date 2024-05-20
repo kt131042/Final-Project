@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddProfile extends StatefulWidget {
   const AddProfile({super.key});
@@ -16,23 +17,55 @@ class _AddProfileState extends State<AddProfile> {
   String _name = '';
   String _room = '';
   String _contact = '';
-  String _checkin = '';
   String _tv = '';
   String _fridge = '';
+  DateTime _selectedDate = DateTime(2024);
 
   Future<void> addData() {
-    return firestore
-        .collection('user')
-        .add({
-          'name': _name,
-          'rooom': _room,
-          'contact': _contact,
-          'checkin': _checkin,
-          'tv': _tv,
-          'fridge': _fridge,
-        })
-        .then((value) => debugPrint("Data Added"))
+    return firestore.collection('user').doc(_name).set({
+      'name': _name,
+      'room': _room,
+      'contact': _contact,
+      'checkin': _selectedDate,
+      'tv': _tv,
+      'fridge': _fridge,
+    }).then((value) {
+      debugPrint("Data Added");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('สำเร็จ'),
+            content: const Text('บรรทีกข้อมูลสำเร็จ'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    })
+        // ignore: invalid_return_type_for_catch_error
         .catchError((error) => debugPrint("Failed to add data: $error"));
+  }
+
+  Future<void> _pickDate() async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (date != null) {
+      setState(() {
+        _selectedDate = date;
+      });
+    }
   }
 
   @override
@@ -95,16 +128,11 @@ class _AddProfileState extends State<AddProfile> {
                     height: 15,
                   ),
                   const Text("วันเข้าหอ"),
-                  TextFormField(
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกวันเข้าหอ';
-                      }
-                      return null;
-                    },
-                    onSaved: (String? value) {
-                      _checkin = value!;
-                    },
+                  ListTile(
+                    title: Text(
+                        'Picked Date: ${DateFormat('dd/MM/yyyy').format(_selectedDate)}'),
+                    trailing: const Icon(Icons.calendar_today),
+                    onTap: _pickDate,
                   ),
                   const SizedBox(
                     height: 15,
