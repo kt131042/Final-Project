@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Room extends StatefulWidget {
   const Room({super.key});
@@ -9,6 +10,8 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
+  final DatabaseReference ref = FirebaseDatabase.instance.ref();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,14 +20,15 @@ class _RoomState extends State<Room> {
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("room").snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: Text("no data"),
-              );
-            }
-            return const Column(
-              children: [Text("data")],
+          builder: (context, snapshot) {
+            return ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(snapshot.data?.docs[index]["room"]),
+                );
+              },
             );
           }),
     );
