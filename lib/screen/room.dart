@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jittirat/screen/calbill.dart';
 
 class Room extends StatefulWidget {
   const Room({super.key});
@@ -15,21 +15,18 @@ class _RoomState extends State<Room> {
       appBar: AppBar(
         title: const Text("Room"),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Calculator()));
-                },
-                child: const Text("คำนวณ")),
-          ),
-          const Text("data")
-        ],
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("room").snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: Text("no data"),
+              );
+            }
+            return const Column(
+              children: [Text("data")],
+            );
+          }),
     );
   }
 }
