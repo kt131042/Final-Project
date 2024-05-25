@@ -29,7 +29,7 @@ class _BuildingState extends State<Building> {
                   ),
                 );
               },
-              child: const Text("อาคาร A"),
+              child: const Text("ตึกจิตติรัตน์ 1"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -40,7 +40,7 @@ class _BuildingState extends State<Building> {
                   ),
                 );
               },
-              child: const Text("อาคาร B"),
+              child: const Text("ตึกจิตติรัตน์ 2"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -51,7 +51,7 @@ class _BuildingState extends State<Building> {
                   ),
                 );
               },
-              child: const Text("อาคาร C"),
+              child: const Text("ตึกจิตติรัตน์ 3"),
             ),
           ],
         ),

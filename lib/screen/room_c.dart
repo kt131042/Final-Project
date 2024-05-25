@@ -16,7 +16,7 @@ class _RoomState extends State<RoomC> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Room"),
+        title: const Text("Jittirat 3"),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("roomC").snapshots(),
