@@ -15,6 +15,7 @@ class _BuildingState extends State<Building> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.pink[300],
         title: const Text("Room"),
       ),
       body: Center(

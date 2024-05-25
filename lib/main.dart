@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:jittirat/screen/building.dart';
-import 'package:jittirat/screen/custumer.dart';
+import 'package:jittirat/screen/customer.dart';
 import 'package:jittirat/screen/dashboard.dart';
 
 void main() async {

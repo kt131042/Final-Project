@@ -18,7 +18,7 @@ class _RoomState extends State<RoomB> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[300],
-        title: const Text("Jittirat 1"),
+        title: const Text("Jittirat 2"),
       ),
       body: Column(
         children: <Widget>[

@@ -43,7 +43,7 @@ class _RoomState extends State<RoomA> {
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
                 stream:
-                    FirebaseFirestore.instance.collection("room").snapshots(),
+                    FirebaseFirestore.instance.collection("roomA").snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Text('Something went wrong');

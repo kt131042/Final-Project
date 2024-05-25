@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jittirat/screen/calbill.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -14,19 +13,9 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Dashboard"),
+        backgroundColor: Colors.pink[300],
       ),
-      body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Calculator(),
-                ),
-              );
-            },
-            child: const Text("คำนวณค่าเช่า")),
-      ),
+      body: const Center(),
     );
   }
 }

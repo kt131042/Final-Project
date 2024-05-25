@@ -29,6 +29,7 @@ class _AddProfileState extends State<AddProfile> {
       'checkin': _selectedDate,
       'tv': _tv,
       'fridge': _fridge,
+      'status': 'กำลังจอง'
     }).then((value) {
       debugPrint("Data Added");
       showDialog(
@@ -41,6 +42,7 @@ class _AddProfileState extends State<AddProfile> {
               TextButton(
                 child: const Text('OK'),
                 onPressed: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
               ),
@@ -89,6 +91,7 @@ class _AddProfileState extends State<AddProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.pink[300],
         title: const Text("เพิ่มผู้เช่าใหม่"),
       ),
       body: Container(

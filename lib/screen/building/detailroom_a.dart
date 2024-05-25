@@ -14,7 +14,7 @@ class DetailroomA extends StatelessWidget {
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future:
-            FirebaseFirestore.instance.collection('room').doc(roomName).get(),
+            FirebaseFirestore.instance.collection('roomA').doc(roomName).get(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text("Something went wrong");
