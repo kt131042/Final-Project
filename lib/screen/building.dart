@@ -18,43 +18,49 @@ class _BuildingState extends State<Building> {
         backgroundColor: Colors.pink[300],
         title: const Text("Room"),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RoomA(),
-                  ),
-                );
-              },
-              child: const Text("ตึกจิตติรัตน์ 1"),
+      body: Container(
+        color: const Color(0xFFfcd1da), // เปลี่ยนสีพื้นหลังที่นี่
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50.0), // ขยับเนื้อหาลงมาที่นี่
+            child: Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RoomA(),
+                      ),
+                    );
+                  },
+                  child: const Text("ตึกจิตติรัตน์ 1"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RoomB(),
+                      ),
+                    );
+                  },
+                  child: const Text("ตึกจิตติรัตน์ 2"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RoomC(),
+                      ),
+                    );
+                  },
+                  child: const Text("ตึกจิตติรัตน์ 3"),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RoomB(),
-                  ),
-                );
-              },
-              child: const Text("ตึกจิตติรัตน์ 2"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RoomC(),
-                  ),
-                );
-              },
-              child: const Text("ตึกจิตติรัตน์ 3"),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,13 @@ class _DashboardState extends State<Dashboard> {
         title: const Text("Dashboard"),
         backgroundColor: Colors.pink[300],
       ),
-      body: const Center(),
+      body: Container(
+        color: const Color(0xFFfcd1da),
+        child: const Padding(
+          padding: EdgeInsets.only(top: 50.0), // ขยับเนื้อหาลงมาที่นี่
+          child: Center(),
+        ),
+      ),
     );
   }
 }

@@ -33,76 +33,84 @@ class _CustumerState extends State<Custumer> {
         title: const Text("Customer"),
         backgroundColor: Colors.pink[300],
       ),
-      body: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddProfile()));
-                    },
-                    child: const Text("Add")),
-              ),
-              const SizedBox(
-                width: 40,
-              ),
-              SizedBox(
-                  child: ElevatedButton(
-                onPressed: changeButtonText,
-                child: Text(buttonText),
-              )),
-            ],
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection("user").snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text("Loading");
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot document = snapshot.data!.docs[index];
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
-                      if (showReserved && data['status'] != 'กำลังจอง') {
-                        return Container(); // Return an empty container for non-reserved users when showReserved is true
-                      }
-                      return ListTile(
-                        leading: data['status'] == 'กำลังจอง'
-                            ? const Icon(Icons.pending_actions)
-                            : data['status'] == 'เช่าอยู่'
-                                ? const Icon(Icons.home)
-                                : null, // Add a home icon for users with status 'เช่าอยู่'
-                        title: ElevatedButton(
-                          child: Text('${index + 1}. ${data['name']}'),
-                          // Display the index before the name
-                          onPressed: () {
-                            Navigator.push(
+      body: Container(
+        color: const Color(0xFFfcd1da),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 50.0), // ขยับเนื้อหาลงมาที่นี่
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CustumerPage(custumerName: data['name']),
-                              ),
-                            );
-                          },
-                        ),
+                                  builder: (context) => const AddProfile()));
+                        },
+                        child: const Text("Add")),
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  SizedBox(
+                      child: ElevatedButton(
+                    onPressed: changeButtonText,
+                    child: Text(buttonText),
+                  )),
+                ],
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("user")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('Something went wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text("Loading");
+                      }
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot document =
+                              snapshot.data!.docs[index];
+                          Map<String, dynamic> data =
+                              document.data() as Map<String, dynamic>;
+                          if (showReserved && data['status'] != 'กำลังจอง') {
+                            return Container(); // Return an empty container for non-reserved users when showReserved is true
+                          }
+                          return ListTile(
+                            leading: data['status'] == 'กำลังจอง'
+                                ? const Icon(Icons.pending_actions)
+                                : data['status'] == 'เช่าอยู่'
+                                    ? const Icon(Icons.home)
+                                    : null, // Add a home icon for users with status 'เช่าอยู่'
+                            title: ElevatedButton(
+                              child: Text('${index + 1}. ${data['name']}'),
+                              // Display the index before the name
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CustumerPage(
+                                        custumerName: data['name']),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
-                }),
+                    }),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
