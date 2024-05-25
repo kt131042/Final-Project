@@ -14,7 +14,7 @@ class DetailroomC extends StatelessWidget {
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future:
-            FirebaseFirestore.instance.collection('room').doc(roomName).get(),
+            FirebaseFirestore.instance.collection('roomC').doc(roomName).get(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text("Something went wrong");
@@ -30,7 +30,7 @@ class DetailroomC extends StatelessWidget {
                   Text('สถานะ: ${data['status']}'),
                   Text('ราคา: ${data['price']}'),
                   Text('เครื่องใช้ไฟฟ้า: ${data['fridge']} ${data['tv']}'),
-                  Text('ผู้เช่า: ${data['custumer']}'),
+                  Text('ผู้เช่า: ${data['customer']}'),
                 ],
               ),
             );

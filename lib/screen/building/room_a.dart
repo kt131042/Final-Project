@@ -16,6 +16,7 @@ class _RoomState extends State<RoomA> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.pink[300],
         title: const Text("Jittirat 1"),
       ),
       body: StreamBuilder<QuerySnapshot>(

@@ -30,7 +30,7 @@ class DetailroomA extends StatelessWidget {
                   Text('สถานะ: ${data['status']}'),
                   Text('ราคา: ${data['price']}'),
                   Text('เครื่องใช้ไฟฟ้า: ${data['fridge']} ${data['tv']}'),
-                  Text('ผู้เช่า: ${data['custumer']}'),
+                  Text('ผู้เช่า: ${data['customer']}'),
                 ],
               ),
             );

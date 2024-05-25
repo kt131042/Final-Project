@@ -16,6 +16,7 @@ class _RoomState extends State<RoomC> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.pink[300],
         title: const Text("Jittirat 3"),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -49,7 +50,7 @@ class _RoomState extends State<RoomC> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  DetailroomC(roomName: data['roomC']),
+                                  DetailroomC(roomName: data['room']),
                             ),
                           );
                         },
