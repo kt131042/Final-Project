@@ -12,6 +12,8 @@ class Custumer extends StatefulWidget {
 
 class _CustumerState extends State<Custumer> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool showReserved = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +32,15 @@ class _CustumerState extends State<Custumer> {
                 },
                 child: const Text("Add")),
           ),
+          SizedBox(
+            child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    showReserved = !showReserved;
+                  });
+                },
+                child: const Text("กำลังจอง")),
+          ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
                 stream:
@@ -46,6 +57,9 @@ class _CustumerState extends State<Custumer> {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data() as Map<String, dynamic>;
+                      if (showReserved && data['status'] != 'จอง') {
+                        return Container(); // Return an empty container for non-reserved users when showReserved is true
+                      }
                       return ListTile(
                         title: ElevatedButton(
                           child: Text(data['name']),

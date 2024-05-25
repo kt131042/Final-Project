@@ -48,9 +48,26 @@ class _AddProfileState extends State<AddProfile> {
           );
         },
       );
-    })
-        // ignore: invalid_return_type_for_catch_error
-        .catchError((error) => debugPrint("Failed to add data: $error"));
+    }).catchError((error) {
+      debugPrint("Failed to add data: $error");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Failed to add data: $error'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   Future<void> _pickDate() async {
