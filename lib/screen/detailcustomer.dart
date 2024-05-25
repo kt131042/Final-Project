@@ -105,7 +105,7 @@ class _CustumerPageState extends State<CustumerPage> {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             DateTime checkinDate = data['checkin'].toDate();
-            String formattedDate = DateFormat('dd/MM/yy').format(checkinDate);
+            String formattedDate = DateFormat('dd/MM/yyyy').format(checkinDate);
             return Center(
               child: Column(
                 children: <Widget>[

@@ -41,50 +41,61 @@ class _RoomState extends State<RoomA> {
             ],
           ),
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection("roomA").snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text("Loading");
-                  }
-                  return ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        const Divider(color: Colors.black),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot document = snapshot.data!.docs[index];
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
-                      return ListTile(
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  'ห้อง: ${data['room']} | สถานะ: ${data['status']} | ประเภท: ${data['type']} |'),
-                            ),
-                            ElevatedButton(
-                              child: const Text('รายละเอียด'),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailroomA(roomName: data['room']),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }),
-          ),
+              child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection("roomA").snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text("Loading");
+              }
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columnSpacing: 45,
+                  horizontalMargin: 5,
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text('ห้อง'),
+                    ),
+                    DataColumn(
+                      label: Text('สถานะ'),
+                    ),
+                    DataColumn(
+                      label: Text('ประเภท'),
+                    ),
+                    DataColumn(
+                      label: Text(''),
+                    ),
+                  ],
+                  rows: snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+                    return DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('${data['room']}')),
+                        DataCell(Text('${data['status']}')),
+                        DataCell(Text('${data['type']}')),
+                        DataCell(ElevatedButton(
+                          child: const Text('รายละเอียด'),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailroomA(roomName: data['room']),
+                              ),
+                            );
+                          },
+                        )),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          )),
         ],
       ),
     );

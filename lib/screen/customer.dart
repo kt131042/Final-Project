@@ -30,7 +30,7 @@ class _CustumerState extends State<Custumer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Custumer"),
+        title: const Text("Customer"),
         backgroundColor: Colors.pink[300],
       ),
       body: Column(
