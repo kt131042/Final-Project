@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jittirat/screen/room_a.dart';
-import 'package:jittirat/screen/room_b.dart';
-import 'package:jittirat/screen/room_c.dart';
+import 'package:jittirat/screen/building/room_a.dart';
+import 'package:jittirat/screen/building/room_b.dart';
+import 'package:jittirat/screen/building/room_c.dart';
 
 class Building extends StatefulWidget {
   const Building({super.key});

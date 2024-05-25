@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailroomA extends StatelessWidget {
   final String roomName;
 
-  const DetailPage({super.key, required this.roomName});
+  const DetailroomA({super.key, required this.roomName});
 
   @override
   Widget build(BuildContext context) {

@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jittirat/screen/detailroom.dart';
+import 'package:jittirat/screen/building/detailroom_c.dart';
 
-class RoomB extends StatefulWidget {
-  const RoomB({super.key});
+class RoomC extends StatefulWidget {
+  const RoomC({super.key});
 
   @override
-  State<RoomB> createState() => _RoomState();
+  State<RoomC> createState() => _RoomState();
 }
 
-class _RoomState extends State<RoomB> {
+class _RoomState extends State<RoomC> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<String> keysToShow = ['room', 'status', 'type'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Jittirat 2"),
+        title: const Text("Jittirat 3"),
       ),
       body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("roomB").snapshots(),
+          stream: FirebaseFirestore.instance.collection("roomC").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
@@ -49,7 +49,7 @@ class _RoomState extends State<RoomB> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  DetailPage(roomName: data['room']),
+                                  DetailroomC(roomName: data['roomC']),
                             ),
                           );
                         },

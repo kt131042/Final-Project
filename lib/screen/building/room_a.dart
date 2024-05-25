@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jittirat/screen/detailroom.dart';
+import 'package:jittirat/screen/building/detailroom_a.dart';
 
 class RoomA extends StatefulWidget {
   const RoomA({super.key});
@@ -49,7 +49,7 @@ class _RoomState extends State<RoomA> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  DetailPage(roomName: data['room']),
+                                  DetailroomA(roomName: data['room']),
                             ),
                           );
                         },
