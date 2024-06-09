@@ -19,11 +19,12 @@ class _BuildingState extends State<Building> {
         title: const Text("Room"),
       ),
       body: Container(
-        color: const Color(0xFFfcd1da), // เปลี่ยนสีพื้นหลังที่นี่
+        color: const Color(0xFFfcd1da),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 50.0), // ขยับเนื้อหาลงมาที่นี่
+            padding: const EdgeInsets.only(top: 50.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
