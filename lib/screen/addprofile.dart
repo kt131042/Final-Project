@@ -117,6 +117,33 @@ class _AddProfileState extends State<AddProfile> {
                   const SizedBox(
                     height: 15,
                   ),
+                  const Text("นามสกุล"),
+                  TextFormField(
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกนามสกุล';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _name = value!;
+                    },
+                  ),
+                  const Text("เลขบัตรประจำตัวประชาชน"),
+                  TextFormField(
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'กรุณากรอกเลขบัตรประจำตัวประชาชน';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      _contact = value!;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   const Text("เบอร์โทรติดต่อ"),
                   TextFormField(
                     validator: (String? value) {
