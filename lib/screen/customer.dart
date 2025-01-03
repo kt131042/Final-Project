@@ -32,6 +32,16 @@ class _CustumerState extends State<Custumer> {
       appBar: AppBar(
         title: const Text("Customer"),
         backgroundColor: Colors.pink[300],
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddProfile()));
+              },
+              child: const Text("Add")),
+        ],
       ),
       body: Container(
         color: const Color(0xFFfcd1da),
@@ -42,16 +52,6 @@ class _CustumerState extends State<Custumer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AddProfile()));
-                        },
-                        child: const Text("Add")),
-                  ),
                   const SizedBox(
                     width: 40,
                   ),

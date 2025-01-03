@@ -20,27 +20,22 @@ class _RoomState extends State<RoomC> {
       appBar: AppBar(
         backgroundColor: Colors.pink[300],
         title: const Text("Jittirat 3"),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Calculator(),
+                ),
+              );
+            },
+            child: const Text('คำนวณค่าไฟ'),
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Calculator()));
-                    },
-                    child: const Text("คำนวณค่าไฟ")),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
-          ),
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("roomC").snapshots(),
