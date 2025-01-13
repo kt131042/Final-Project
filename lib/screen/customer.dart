@@ -91,7 +91,8 @@ class _CustumerState extends State<Custumer> {
                                     ? const Icon(Icons.home)
                                     : null, // Add a home icon for users with status 'เช่าอยู่'
                             title: ElevatedButton(
-                              child: Text('${index + 1}. ${data['name']}'),
+                              child: Text(
+                                  '${index + 1}. ${data['name']} ${data['lastname']}'),
                               // Display the index before the name
                               onPressed: () {
                                 Navigator.push(

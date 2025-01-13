@@ -15,7 +15,9 @@ class _AddProfileState extends State<AddProfile> {
   bool tvisChecked = false;
   bool fridgeChecked = false;
   String _name = '';
+  String _lastname = '';
   String _room = '';
+  String _nid = '';
   String _contact = '';
   String _tv = '';
   String _fridge = '';
@@ -24,7 +26,9 @@ class _AddProfileState extends State<AddProfile> {
   Future<void> addData() {
     return firestore.collection('user').doc(_name).set({
       'name': _name,
+      'lastname': _lastname,
       'room': _room,
+      'id card number': _nid,
       'contact': _contact,
       'checkin': _selectedDate,
       'tv': _tv,
@@ -102,7 +106,7 @@ class _AddProfileState extends State<AddProfile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("ชื่อ-สกุล"),
+                  const Text("ชื่อ"),
                   TextFormField(
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -126,7 +130,7 @@ class _AddProfileState extends State<AddProfile> {
                       return null;
                     },
                     onSaved: (String? value) {
-                      _name = value!;
+                      _lastname = value!;
                     },
                   ),
                   const Text("เลขบัตรประจำตัวประชาชน"),
@@ -138,7 +142,7 @@ class _AddProfileState extends State<AddProfile> {
                       return null;
                     },
                     onSaved: (String? value) {
-                      _contact = value!;
+                      _nid = value!;
                     },
                   ),
                   const SizedBox(

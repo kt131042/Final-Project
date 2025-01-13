@@ -13,6 +13,7 @@ class CustumerPage extends StatefulWidget {
 
 class _CustumerPageState extends State<CustumerPage> {
   CollectionReference users = FirebaseFirestore.instance.collection('user');
+  CollectionReference room = FirebaseFirestore.instance.collection('roomA');
 
   Future<void> confirmReservation() async {
     await users
@@ -85,7 +86,46 @@ class _CustumerPageState extends State<CustumerPage> {
       return null;
     });
   }
+///////////////////////////////////ออกหอพัก ยังไม่เสร็จ
 
+  Future<void> leaveDorm() async {
+    await users.doc(widget.custumerName).delete().then((value) {
+      debugPrint("Leave Dormitory");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('ยืนยันการออกหอพัก'),
+            content: const Text('บันทึกสำเร็จ'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }).catchError((error) {
+      debugPrint("Failed to cancel reservation: $error");
+      return null;
+    });
+  }
+
+  Future<void> leaveComplete() async {
+    leaveDorm();
+    cancelReservation();
+    await room
+        .doc(widget.custumerName)
+        .update({'status': 'ว่าง'}).then((value) async {
+      debugPrint("Reservation Confirmed");
+    });
+  }
+
+////////////////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,9 +150,11 @@ class _CustumerPageState extends State<CustumerPage> {
               child: Column(
                 children: <Widget>[
                   Text('ชื่อ: ${data['name']}'),
+                  Text('สกุล: ${data['lastname']}'),
                   Text('ห้อง: ${data['room']}'),
                   Text('เข้าหอ:  $formattedDate'),
                   Text('ติดต่อ: ${data['contact']}'),
+                  Text('เลขบัตรประจำตัวประชาชน: ${data['id card number']}'),
                   if (data['status'] == 'กำลังจอง') ...[
                     ElevatedButton(
                       onPressed: confirmReservation,
@@ -122,6 +164,10 @@ class _CustumerPageState extends State<CustumerPage> {
                       onPressed: cancelReservation,
                       child: const Text('ยกเลิกการจอง'),
                     ),
+                  ],
+                  if (data['status'] == 'เช่าอยู่') ...[
+                    ElevatedButton(
+                        onPressed: leaveComplete, child: const Text("ออกหอ"))
                   ],
                 ],
               ),
