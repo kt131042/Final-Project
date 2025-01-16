@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jittirat/screen/addprofile.dart';
-import 'package:jittirat/screen/detailcustomer.dart';
+import 'package:jittirat/screen/detailcustumer.dart';
 
 class Custumer extends StatefulWidget {
   const Custumer({super.key});
@@ -12,6 +12,7 @@ class Custumer extends StatefulWidget {
 
 class _CustumerState extends State<Custumer> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   bool showReserved = false;
   String buttonText = 'กำลังจอง';
 
@@ -99,7 +100,7 @@ class _CustumerState extends State<Custumer> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => CustumerPage(
-                                        custumerName: data['name']),
+                                        nid: data['id card number']),
                                   ),
                                 );
                               },

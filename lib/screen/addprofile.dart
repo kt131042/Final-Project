@@ -24,7 +24,7 @@ class _AddProfileState extends State<AddProfile> {
   DateTime _selectedDate = DateTime(2024);
 
   Future<void> addData() {
-    return firestore.collection('user').doc(_name).set({
+    return firestore.collection('user').doc(_nid).set({
       'name': _name,
       'lastname': _lastname,
       'room': _room,
