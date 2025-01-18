@@ -23,57 +23,63 @@ class _AddProfileState extends State<AddProfile> {
   String _fridge = '';
   DateTime _selectedDate = DateTime(2024);
 
-  Future<void> addData() {
-    return firestore.collection('user').doc(_nid).set({
-      'name': _name,
-      'lastname': _lastname,
-      'room': _room,
-      'id card number': _nid,
-      'contact': _contact,
-      'checkin': _selectedDate,
-      'tv': _tv,
-      'fridge': _fridge,
-      'status': 'กำลังจอง'
-    }).then((value) {
-      debugPrint("Data Added");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('สำเร็จ'),
-            content: const Text('บรรทีกข้อมูลสำเร็จ'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }).catchError((error) {
-      debugPrint("Failed to add data: $error");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text('Failed to add data: $error'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
+  Future<void> addData() async {
+    DocumentReference userRef = firestore.collection('user').doc(_nid);
+
+    // ลองดูว่ามีเอกสารนี้อยู่แล้วหรือไม่
+    DocumentSnapshot userDoc = await userRef.get();
+
+    if (userDoc.exists) {
+      // ถ้ามีเอกสารนี้อยู่แล้ว ให้เพิ่มห้องใน array
+      await userRef.update({
+        'rooms': FieldValue.arrayUnion([
+          {
+            'room': _room,
+            'checkin': _selectedDate,
+            'tv': _tv,
+            'fridge': _fridge,
+            'status': 'กำลังจอง'
+          }
+        ])
+      });
+    } else {
+      // ถ้ายังไม่มีเอกสารนี้ ให้สร้างเอกสารใหม่
+      await userRef.set({
+        'name': _name,
+        'lastname': _lastname,
+        'id card number': _nid,
+        'contact': _contact,
+        'rooms': [
+          {
+            'room': _room,
+            'checkin': _selectedDate,
+            'tv': _tv,
+            'fridge': _fridge,
+            'status': 'กำลังจอง'
+          }
+        ]
+      });
+    }
+
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('สำเร็จ'),
+          content: const Text('บันทึกข้อมูลสำเร็จ'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _pickDate() async {
@@ -93,6 +99,10 @@ class _AddProfileState extends State<AddProfile> {
 
   @override
   Widget build(BuildContext context) {
+    const textFieldDecoration = InputDecoration(
+      border: OutlineInputBorder(),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[300],
@@ -108,6 +118,9 @@ class _AddProfileState extends State<AddProfile> {
                 children: [
                   const Text("ชื่อ"),
                   TextFormField(
+                    decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกชื่อ',
+                    ),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return 'กรุณากรอกชื่อ';
@@ -118,11 +131,12 @@ class _AddProfileState extends State<AddProfile> {
                       _name = value!;
                     },
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   const Text("นามสกุล"),
                   TextFormField(
+                    decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกนามสกุล',
+                    ),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return 'กรุณากรอกนามสกุล';
@@ -133,8 +147,12 @@ class _AddProfileState extends State<AddProfile> {
                       _lastname = value!;
                     },
                   ),
+                  const SizedBox(height: 15),
                   const Text("เลขบัตรประจำตัวประชาชน"),
                   TextFormField(
+                    decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกเลขบัตรประจำตัวประชาชน',
+                    ),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return 'กรุณากรอกเลขบัตรประจำตัวประชาชน';
@@ -145,11 +163,12 @@ class _AddProfileState extends State<AddProfile> {
                       _nid = value!;
                     },
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   const Text("เบอร์โทรติดต่อ"),
                   TextFormField(
+                    decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกเบอร์โทร',
+                    ),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return 'กรุณากรอกเบอร์โทรศัพท์';
@@ -160,11 +179,12 @@ class _AddProfileState extends State<AddProfile> {
                       _contact = value!;
                     },
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   const Text("หมายเลขห้อง"),
                   TextFormField(
+                    decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกหมายเลขห้อง',
+                    ),
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return 'กรุณากรอกหมายเลขห้อง';
@@ -175,9 +195,7 @@ class _AddProfileState extends State<AddProfile> {
                       _room = value!;
                     },
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   const Text("วันเข้าหอ"),
                   ListTile(
                     title: Text(
@@ -185,13 +203,9 @@ class _AddProfileState extends State<AddProfile> {
                     trailing: const Icon(Icons.calendar_today),
                     onTap: _pickDate,
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   const Text("เครื่องใช้ไฟฟ้าเพิ่มเติม"),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -204,9 +218,7 @@ class _AddProfileState extends State<AddProfile> {
                               _tv = tvisChecked ? "ทีวี" : "";
                             });
                           }),
-                      const SizedBox(
-                        width: 100,
-                      ),
+                      const SizedBox(width: 100),
                       const Text("ตู้เย็น"),
                       Checkbox(
                           value: fridgeChecked,
@@ -218,9 +230,7 @@ class _AddProfileState extends State<AddProfile> {
                           }),
                     ],
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
