@@ -132,8 +132,8 @@ class _CustomerState extends State<Customer> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CustumerPage(
-                                        nid: data['id card number']),
+                                    builder: (context) =>
+                                        CustumerPage(nid: data['id_card']),
                                   ),
                                 );
                               },

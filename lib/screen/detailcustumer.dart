@@ -144,8 +144,8 @@ class _CustumerPageState extends State<CustumerPage> {
                             _buildInfoText('ห้อง', data['room']),
                             _buildInfoText('เข้าหอ', formattedDate),
                             _buildInfoText('ติดต่อ', data['contact']),
-                            _buildInfoText('เลขบัตรประจำตัวประชาชน',
-                                data['id card number']),
+                            _buildInfoText(
+                                'เลขบัตรประจำตัวประชาชน', data['id_card']),
                             const SizedBox(height: 20),
                             if (data['status'] == 'กำลังจอง') ...[
                               _buildActionButton(

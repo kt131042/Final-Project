@@ -21,59 +21,78 @@ class _AddProfileState extends State<AddProfile> {
   int _tv = 0;
   int _fridge = 0;
   DateTime _selectedDate = DateTime(2024);
-  final List<String> _rooms = []; // ใช้ List สำหรับห้อง
+  final List<String> _room = [];
 
-  Future<void> addData() {
-    return firestore.collection('user').doc(_nid).set({
-      'name': _name,
-      'lastname': _lastname,
-      'rooms': _rooms, // ใช้ List สำหรับห้อง
-      'id card number': _nid,
-      'contact': _contact,
-      'checkin': _selectedDate,
-      'tv': _tv,
-      'fridge': _fridge,
-      'status': 'กำลังจอง'
-    }).then((value) {
-      debugPrint("Data Added");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('สำเร็จ'),
-            content: const Text('บันทึกข้อมูลสำเร็จ'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }).catchError((error) {
+  Future<void> addData() async {
+    try {
+      // เพิ่มข้อมูลผู้ใช้ใหม่
+      await firestore.collection('user').doc(_nid).set({
+        'name': _name,
+        'lastname': _lastname,
+        'room': _room,
+        'id_card': _nid,
+        'contact': _contact,
+        'checkin': _selectedDate,
+        'tv': _tv,
+        'fridge': _fridge,
+        'status': 'กำลังจอง'
+      });
+
+      // ตรวจสอบและอัปเดตสถานะของห้องที่จอง
+      for (String roomId in _room) {
+        DocumentReference roomRef = firestore.collection('room').doc(roomId);
+        DocumentSnapshot roomSnapshot = await roomRef.get();
+        if (roomSnapshot.exists) {
+          await roomRef.update({
+            'status': 'กำลังจอง',
+          });
+        } else {
+          debugPrint("Room ID $roomId not found in collection 'room'");
+        }
+      }
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('สำเร็จ'),
+              content: const Text('บันทึกข้อมูลสำเร็จ'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (error) {
       debugPrint("Failed to add data: $error");
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text('Failed to add data: $error'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    });
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text('Failed to add data: $error'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
   }
 
   Future<void> _pickDate() async {
@@ -177,9 +196,9 @@ class _AddProfileState extends State<AddProfile> {
                 const Text("หมายเลขห้อง"),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _rooms.length + 1,
+                  itemCount: _room.length + 1,
                   itemBuilder: (context, index) {
-                    if (index == _rooms.length) {
+                    if (index == _room.length) {
                       return TextFormField(
                         decoration: textFieldDecoration.copyWith(
                           hintText: 'กรอกหมายเลขห้อง',
@@ -187,14 +206,14 @@ class _AddProfileState extends State<AddProfile> {
                         onSaved: (String? value) {
                           if (value != null && value.isNotEmpty) {
                             setState(() {
-                              _rooms.add(value); // เพิ่มห้องเข้า List
+                              _room.add(value);
                             });
                           }
                         },
                       );
                     }
                     return ListTile(
-                      title: Text('ห้อง: ${_rooms[index]}'),
+                      title: Text('ห้อง: ${_room[index]}'),
                     );
                   },
                 ),
