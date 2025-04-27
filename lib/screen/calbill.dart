@@ -8,6 +8,7 @@ class Calculator extends StatefulWidget {
   State<Calculator> createState() => _CalculatorState();
 }
 
+//ทำอันนี้
 class _CalculatorState extends State<Calculator> {
   final CollectionReference _roomsCollection =
       FirebaseFirestore.instance.collection('roomA');
