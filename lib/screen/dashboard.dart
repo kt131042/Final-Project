@@ -12,7 +12,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
+        title: const Text("DASHBOARD"),
         backgroundColor: Colors.pink[300],
       ),
       body: Container(

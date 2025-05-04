@@ -16,7 +16,7 @@ class _BuildingState extends State<Building> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("หน้าแรก"),
+        title: const Text("HOME"),
         backgroundColor: Colors.pink[300],
         actions: [
           DropdownButton<String>(

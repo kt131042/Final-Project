@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jittirat/screen/addprofile.dart';
-import 'package:jittirat/screen/detailcustumer.dart';
+import 'package:jittirat/screen/detailcustomer.dart';
 
 class Customer extends StatefulWidget {
   const Customer({super.key});
@@ -33,7 +33,7 @@ class _CustomerState extends State<Customer> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Customer"),
+        title: const Text("CUSTOMER"),
         backgroundColor: Colors.pink[300],
         actions: [
           ElevatedButton(
@@ -48,7 +48,7 @@ class _CustomerState extends State<Customer> {
               backgroundColor: Colors.white,
               textStyle: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            child: const Text("Add"),
+            child: const Text("ลงทะเบียน"),
           ),
         ],
       ),
@@ -123,7 +123,7 @@ class _CustomerState extends State<Customer> {
                                       : const Icon(Icons.person,
                                           color: Colors.blueGrey),
                               title: Text(
-                                '${data['room']}    ${data['name']} ${data['lastname']} ',
+                                '${data['name']} ${data['lastname']} ',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.pink[300]),
@@ -133,7 +133,7 @@ class _CustomerState extends State<Customer> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        CustumerPage(nid: data['id_card']),
+                                        CustomerPage(nid: data['id_card']),
                                   ),
                                 );
                               },
