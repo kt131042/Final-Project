@@ -20,6 +20,7 @@ class _BuildingState extends State<Building> {
         backgroundColor: Colors.pink[300],
         actions: [
           DropdownButton<String>(
+            dropdownColor: Colors.white,
             value: filter,
             onChanged: (String? newValue) {
               setState(() {

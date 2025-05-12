@@ -12,60 +12,67 @@ class CustomerPage extends StatefulWidget {
 }
 
 class _CustomerPageState extends State<CustomerPage> {
-  CollectionReference users = FirebaseFirestore.instance.collection('user');
-  CollectionReference rooms = FirebaseFirestore.instance.collection('room');
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('user');
+  final CollectionReference rooms =
+      FirebaseFirestore.instance.collection('room');
 
-  Future<void> confirmReservation(String roomNumber) async {
-    await rooms
-        .doc(widget.nid)
-        .update({'status': 'เช่าอยู่'}).then((value) async {
-      debugPrint("Reservation Confirmed for room $roomNumber");
+  Future<void> confirmReservation() async {
+    try {
+      DocumentSnapshot userDoc = await users.doc(widget.nid).get();
+      List<dynamic> roomsBooked = userDoc['room']; // ดึงห้องที่ผู้ใช้จองทั้งหมด
+
+      for (String roomId in roomsBooked) {
+        await rooms.doc(roomId).update({'status': 'เช่าอยู่'});
+      }
+
+      await users
+          .doc(widget.nid)
+          .update({'status': 'เช่าอยู่'}); // อัปเดตสถานะผู้ใช้
+
+      setState(() {}); // รีเฟรชหน้า
+      _showDialog('ยืนยันการจอง', 'ห้องที่เลือกถูกเปลี่ยนเป็นห้องเช่าอยู่แล้ว');
+    } catch (error) {
+      debugPrint("Failed to confirm reservation: $error");
+    }
+  }
+
+  Future<void> cancelReservation(String roomNumber) async {
+    try {
+      await rooms.doc(roomNumber).update({'status': 'ว่าง'});
 
       DocumentSnapshot userDoc = await users.doc(widget.nid).get();
-      String fridge = userDoc['fridge'];
-      String tv = userDoc['tv'];
-      String nid = userDoc['id card number'];
-      String status = userDoc['status'];
-      String roomCollection = 'room${roomNumber[0].toUpperCase()}';
+      List<dynamic> roomsBooked = List.from(userDoc['room']);
 
-      await FirebaseFirestore.instance
-          .collection(roomCollection)
-          .doc(roomNumber)
-          .update({
-        'id card number': nid,
-        'customer': widget.nid,
-        'fridge': fridge,
-        'tv': tv,
-        'status': status,
-      });
+      roomsBooked.remove(roomNumber);
+      await users.doc(widget.nid).update({'room': roomsBooked});
 
-      if (mounted) {
-        _showDialog('ยืนยันการจอง', 'จองห้อง $roomNumber สำเร็จแล้ว');
-      }
-    }).catchError((error) {
-      debugPrint("Failed to confirm reservation: $error");
-    });
+      setState(() {}); // รีเฟรชหน้า
+      _showDialog('ยกเลิกการจอง', 'ห้อง $roomNumber ถูกยกเลิกการจองแล้ว');
+    } catch (error) {
+      debugPrint("Failed to cancel reservation: $error");
+    }
   }
 
   Future<void> leaveDorm(String roomNumber) async {
-    await users.doc(widget.nid).delete().then((value) async {
-      await FirebaseFirestore.instance
-          .collection('room')
-          .doc(roomNumber)
-          .update({
-        'status': 'ว่าง',
-        'customer': '',
-        'id card number': '',
-        'fridge': 0,
-        'tv': 0,
-      });
+    try {
+      await rooms.doc(roomNumber).update({'status': 'ว่าง'});
 
-      if (mounted) {
-        _showDialog('ออกหอเรียบร้อย', 'ข้อมูลของคุณถูกลบออกจากระบบแล้ว');
+      DocumentSnapshot userDoc = await users.doc(widget.nid).get();
+      List<dynamic> roomsRented = List.from(userDoc['room']);
+
+      roomsRented.remove(roomNumber);
+      await users.doc(widget.nid).update({'room': roomsRented});
+
+      if (roomsRented.isEmpty) {
+        await users.doc(widget.nid).update({'status': null});
       }
-    }).catchError((error) {
+
+      setState(() {}); // รีเฟรชหน้า
+      _showDialog('ออกหอเรียบร้อย', 'ห้อง $roomNumber ถูกออกจากหอพักแล้ว');
+    } catch (error) {
       debugPrint("Failed to leave dorm: $error");
-    });
+    }
   }
 
   void _showDialog(String title, String content) {
@@ -96,8 +103,9 @@ class _CustomerPageState extends State<CustomerPage> {
         if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(
-                title: const Text("ข้อมูลลูกค้า"),
-                backgroundColor: Colors.pink[200]),
+              title: const Text("ข้อมูลลูกค้า"),
+              backgroundColor: Colors.pink[200],
+            ),
             body: const Center(child: Text("เกิดข้อผิดพลาดในการโหลดข้อมูล")),
           );
         }
@@ -120,6 +128,14 @@ class _CustomerPageState extends State<CustomerPage> {
                   _buildInfoBox(data, formattedDate),
                   const SizedBox(height: 16),
                   _buildRoomBoxes(data),
+                  const SizedBox(height: 16),
+                  if (data['status'] == 'กำลังจอง')
+                    ElevatedButton(
+                      onPressed: confirmReservation,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink[300]),
+                      child: const Text('ยืนยันการจองห้องทั้งหมด'),
+                    ),
                 ],
               ),
             ),
@@ -128,8 +144,9 @@ class _CustomerPageState extends State<CustomerPage> {
 
         return Scaffold(
           appBar: AppBar(
-              title: const Text("ข้อมูลลูกค้า"),
-              backgroundColor: Colors.pink[200]),
+            title: const Text("ข้อมูลลูกค้า"),
+            backgroundColor: Colors.pink[200],
+          ),
           body: const Center(child: CircularProgressIndicator()),
         );
       },
@@ -173,10 +190,6 @@ class _CustomerPageState extends State<CustomerPage> {
           Text('เลขบัตรประชาชน: ${data['id_card'] ?? 'ไม่มีข้อมูล'}',
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
-          const SizedBox(height: 10),
-          Text('สถานะทั่วไป: ${data['status'] ?? 'ไม่มีข้อมูล'}',
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
         ],
       ),
     );
@@ -210,36 +223,19 @@ class _CustomerPageState extends State<CustomerPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.pink[800])),
-                const SizedBox(height: 8),
-                Text('สถานะของห้อง: ${data['status'] ?? 'ไม่พบข้อมูล'}',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400)),
-                const SizedBox(height: 10),
                 if (data['status'] == 'กำลังจอง')
                   ElevatedButton(
-                    onPressed: () => confirmReservation(room),
+                    onPressed: () => cancelReservation(room),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.pink[300],
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)),
-                    ),
-                    child: const Text('ยืนยันการจอง'),
+                        backgroundColor: Colors.orange[300]),
+                    child: const Text('ยกเลิกการจอง'),
                   ),
                 if (data['status'] == 'เช่าอยู่')
                   ElevatedButton(
                     onPressed: () => leaveDorm(room),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red[300],
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0)),
-                    ),
-                    child: const Text('ยืนยันการออกหอ'),
+                        backgroundColor: Colors.red[300]),
+                    child: const Text('ออกจากห้อง'),
                   ),
               ],
             ),
