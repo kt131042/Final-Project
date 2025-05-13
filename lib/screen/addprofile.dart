@@ -62,6 +62,7 @@ class _AddProfileState extends State<AddProfile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.pink[50],
           title: const Text('สำเร็จ'),
           content: const Text('บันทึกข้อมูลสำเร็จ'),
           actions: <Widget>[
@@ -83,6 +84,7 @@ class _AddProfileState extends State<AddProfile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.pink[50],
           title: const Text('Error'),
           content: Text(errorMessage),
           actions: <Widget>[
@@ -216,6 +218,8 @@ class _AddProfileState extends State<AddProfile> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink[200]),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();

@@ -12,7 +12,6 @@ class Customer extends StatefulWidget {
 
 class _CustomerState extends State<Customer> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
   bool showReserved = false;
 
   void changeButtonStatus(bool isReserved) {
@@ -36,17 +35,15 @@ class _CustomerState extends State<Customer> {
         title: const Text("CUSTOMER"),
         backgroundColor: Colors.pink[300],
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const AddProfile()),
               );
             },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.pink[300],
-              backgroundColor: Colors.white,
-              textStyle: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
             ),
             child: const Text("ลงทะเบียน"),
           ),
@@ -84,8 +81,11 @@ class _CustomerState extends State<Customer> {
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection("user").snapshots(),
+                  stream: firestore
+                      .collection("user")
+                      .where('status',
+                          isEqualTo: showReserved ? 'กำลังจอง' : 'เช่าอยู่')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return const Text('Something went wrong');
@@ -93,18 +93,16 @@ class _CustomerState extends State<Customer> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(child: Text("ไม่มีข้อมูลในขณะนี้"));
+                    }
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         DocumentSnapshot document = snapshot.data!.docs[index];
                         Map<String, dynamic> data =
                             document.data() as Map<String, dynamic>;
-                        if (showReserved && data['status'] != 'กำลังจอง') {
-                          return Container();
-                        }
-                        if (!showReserved && data['status'] != 'เช่าอยู่') {
-                          return Container();
-                        }
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 16.0),
@@ -114,16 +112,20 @@ class _CustomerState extends State<Customer> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: ListTile(
-                              leading: data['status'] == 'กำลังจอง'
-                                  ? const Icon(Icons.pending_actions,
-                                      color: Colors.orange)
-                                  : data['status'] == 'เช่าอยู่'
-                                      ? const Icon(Icons.home,
-                                          color: Colors.green)
-                                      : const Icon(Icons.person,
-                                          color: Colors.blueGrey),
+                              leading: Icon(
+                                (data['status'] ?? '') == 'กำลังจอง'
+                                    ? Icons.pending_actions
+                                    : (data['status'] ?? '') == 'เช่าอยู่'
+                                        ? Icons.home
+                                        : Icons.person,
+                                color: (data['status'] ?? '') == 'กำลังจอง'
+                                    ? Colors.orange
+                                    : (data['status'] ?? '') == 'เช่าอยู่'
+                                        ? Colors.green
+                                        : Colors.blueGrey,
+                              ),
                               title: Text(
-                                '${data['name']} ${data['lastname']} ',
+                                '${data['name']} ${data['lastname']}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.pink[300]),
