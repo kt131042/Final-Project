@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart'; // ✅ ใช้จัดรูปแบบวันที่
+import 'package:intl/intl.dart';
 
 class CalBill extends StatefulWidget {
   const CalBill({super.key});
@@ -17,15 +17,15 @@ class _CalBillState extends State<CalBill> {
   @override
   void initState() {
     super.initState();
-    // ✅ ตั้งค่าเริ่มต้นให้ช่องวันที่เป็นเดือนปัจจุบัน (YYYY-MM)
+
     monthController.text = DateFormat('yyyy-MM').format(DateTime.now());
   }
 
   void saveElectricityData(String roomId) async {
-    if (!mounted) return; // ✅ เช็กว่าหน้ายังเปิดอยู่
+    if (!mounted) return;
 
     double? unit = double.tryParse(unitControllers[roomId]!.text);
-    if (unit == null || unit <= 0) return; // ✅ ตรวจสอบว่าค่าที่ป้อนถูกต้อง
+    if (unit == null || unit <= 0) return;
 
     // ดึงข้อมูลค่าหน่วยก่อนหน้า เฉพาะห้องที่ถูกกด Save
     var prevData = await firestore

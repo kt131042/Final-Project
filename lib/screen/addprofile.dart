@@ -157,19 +157,29 @@ class _AddProfileState extends State<AddProfile> {
                 TextFormField(
                   decoration: textFieldDecoration.copyWith(
                       hintText: 'กรอกเลขบัตรประชาชน'),
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'กรุณากรอกเลขบัตรประชาชน'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'กรุณากรอกเลขบัตรประชาชน';
+                    } else if (!RegExp(r'^[0-9]{13}$').hasMatch(value)) {
+                      return 'เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก';
+                    }
+                    return null;
+                  },
                   onSaved: (value) => _nid = value!,
                 ),
                 const SizedBox(height: 15),
                 const Text("เบอร์โทรติดต่อ"),
                 TextFormField(
-                  decoration:
-                      textFieldDecoration.copyWith(hintText: 'กรอกเบอร์โทร'),
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'กรุณากรอกเบอร์โทร'
-                      : null,
+                  decoration: textFieldDecoration.copyWith(
+                      hintText: 'กรอกเบอร์โทรศัพท์'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'กรุณากรอกเบอร์โทรศัพท์';
+                    } else if (!RegExp(r'^0[0-9]{9}$').hasMatch(value)) {
+                      return 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก และขึ้นต้นด้วย 0';
+                    }
+                    return null;
+                  },
                   onSaved: (value) => _contact = value!,
                 ),
                 const SizedBox(height: 15),
