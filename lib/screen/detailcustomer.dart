@@ -31,7 +31,8 @@ class _CustomerPageState extends State<CustomerPage> {
           .update({'status': 'เช่าอยู่'}); // อัปเดตสถานะผู้ใช้
 
       setState(() {}); // รีเฟรชหน้า
-      _showDialog('ยืนยันการจอง', 'ห้องที่เลือกถูกเปลี่ยนเป็นห้องเช่าอยู่แล้ว');
+      _showDialog(
+          'ยืนยันการเข้าหอ', 'ห้องที่เลือกถูกเปลี่ยนเป็นห้องเช่าอยู่แล้ว');
     } catch (error) {
       debugPrint("Failed to confirm reservation: $error");
     }

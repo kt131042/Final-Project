@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class CalBill extends StatefulWidget {
   const CalBill({super.key});
@@ -113,6 +114,9 @@ class _CalBillState extends State<CalBill> {
                           subtitle: TextField(
                             controller: unitControllers[roomId],
                             keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ], // ป้องกันการใส่อักษร
                             decoration: const InputDecoration(
                               labelText: "กรอกหน่วยไฟ",
                               border: OutlineInputBorder(),
